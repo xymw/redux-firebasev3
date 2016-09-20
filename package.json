@@ -10,7 +10,7 @@
     "source"
   ],
   "scripts": {
-    "build": "babel source --out-dir build",
+    "build": "babel source --out-dir build --presets es2015,stage-1,react --plugins transform-decorators-legacy,lodash",
     "build-dev": "babel source --out-dir build --watch --source-maps inline",
     "watch": "npm run build -- --watch",
     "clean": "rimraf build",
