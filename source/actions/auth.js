@@ -277,6 +277,7 @@ export const createUser = (dispatch, firebase, { email, password, signIn }, prof
         ? createUserProfile(dispatch, firebase, userData, profile)
         : login(dispatch, firebase, { email, password })
             .then(() => createUserProfile(dispatch, firebase, userData, profile))
+            .then(() => userData.sendEmailVerification())
             .catch(err => {
               if (err) {
                 switch (err.code) {
@@ -307,6 +308,99 @@ export const resetPassword = (dispatch, firebase, email) => {
   dispatchLoginError(dispatch, null)
   return firebase.auth()
     .sendPasswordResetEmail(email)
+    .catch((err) => {
+      if (err) {
+        switch (err.code) {
+          case 'INVALID_USER':
+            dispatchLoginError(dispatch, new Error('The specified user account does not exist.'))
+            break
+          default:
+            dispatchLoginError(dispatch, err)
+        }
+        return Promise.reject(err)
+      }
+    })
+}
+
+/**
+ * @description Checks a password reset code sent to the user by email or other out-of-band mechanism.
+ * @param {String} code - Password reset code
+ * @return {Promise}
+ */
+export const verifyPasswordResetCode = (dispatch, firebase, code) => {
+  dispatchLoginError(dispatch, null)
+  return firebase.auth()
+    .verifyPasswordResetCode(code)
+    .catch((err) => {
+      if (err) {
+        switch (err.code) {
+          case 'INVALID_USER':
+            dispatchLoginError(dispatch, new Error('The specified user account does not exist.'))
+            break
+          default:
+            dispatchLoginError(dispatch, err)
+        }
+        return Promise.reject(err)
+      }
+    })
+}
+
+/**
+ * @description Completes the password reset process, given a confirmation code and new password.
+ * @param {String} code - Password reset code
+ * @param {String} newPassword - Password
+ * @return {Promise}
+ */
+export const confirmPasswordReset = (dispatch, firebase, code, newPassword) => {
+  dispatchLoginError(dispatch, null)
+  return firebase.auth()
+    .confirmPasswordReset(code, newPassword)
+    .catch((err) => {
+      if (err) {
+        switch (err.code) {
+          case 'INVALID_USER':
+            dispatchLoginError(dispatch, new Error('The specified user account does not exist.'))
+            break
+          default:
+            dispatchLoginError(dispatch, err)
+        }
+        return Promise.reject(err)
+      }
+    })
+}
+
+/**
+ * @description Applies a verification code sent to the user by email or other out-of-band mechanism.
+ * @param {String} code - Action code
+ * @return {Promise}
+ */
+export const applyActionCode = (dispatch, firebase, code) => {
+  dispatchLoginError(dispatch, null)
+  return firebase.auth()
+    .applyActionCode(code)
+    .catch((err) => {
+      if (err) {
+        switch (err.code) {
+          case 'INVALID_USER':
+            dispatchLoginError(dispatch, new Error('The specified user account does not exist.'))
+            break
+          default:
+            dispatchLoginError(dispatch, err)
+        }
+        return Promise.reject(err)
+      }
+    })
+}
+
+/**
+ * @description Checks a verification code sent to the user by email or other out-of-band mechanism.
+ * @param {String} code - Action code
+ * @return {Promise}
+ */
+export const checkActionCode = (dispatch, firebase, code) => {
+  dispatchLoginError(dispatch, null)
+  return firebase.auth()
+    .checkActionCode(code)
     .catch((err) => {
       if (err) {
         switch (err.code) {
