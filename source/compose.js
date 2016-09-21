@@ -87,6 +87,18 @@ export default (config, otherConfig) =>
     const resetPassword = (credentials) =>
       authActions.resetPassword(dispatch, firebase, credentials)
 
+    const verifyPasswordResetCode = (code) =>
+      authActions.verifyPasswordResetCode(dispatch, firebase, code)
+
+    const confirmPasswordReset = (code, newPassword) =>
+      authActions.confirmPasswordReset(dispatch, firebase, code, newPassword)
+
+    const applyActionCode = (code) =>
+      authActions.applyActionCode(dispatch, firebase, code)
+
+    const checkActionCode = (code) =>
+      authActions.checkActionCode(dispatch, firebase, code)
+
     firebase.helpers = {
       set,
       uniqueSet,
@@ -97,6 +109,10 @@ export default (config, otherConfig) =>
       logout,
       createUser,
       resetPassword,
+      verifyPasswordResetCode,
+      confirmPasswordReset,
+      applyActionCode,
+      checkActionCode,
       watchEvent,
       unWatchEvent
     }
