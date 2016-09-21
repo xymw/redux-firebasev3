@@ -271,13 +271,13 @@ export const createUser = (dispatch, firebase, { email, password, signIn }, prof
 
   return firebase.auth()
     .createUserWithEmailAndPassword(email, password)
-    .then((userData) =>
+    .then((userData) => {
+      userData.sendEmailVerification()
       // Login to newly created account if signIn
-      firebase.auth().currentUser || (!!signIn && signIn === false)
+      return firebase.auth().currentUser || (!!signIn && signIn === false)
         ? createUserProfile(dispatch, firebase, userData, profile)
         : login(dispatch, firebase, { email, password })
             .then(() => createUserProfile(dispatch, firebase, userData, profile))
-            .then(() => userData.sendEmailVerification())
             .catch(err => {
               if (err) {
                 switch (err.code) {
@@ -290,7 +290,7 @@ export const createUser = (dispatch, firebase, { email, password, signIn }, prof
               }
               return Promise.reject(err)
             })
-    )
+    })
     .catch((err) => {
       dispatchLoginError(dispatch, err)
       return Promise.reject(err)
