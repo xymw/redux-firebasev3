@@ -272,11 +272,11 @@ export const createUser = (dispatch, firebase, { email, password, signIn, displa
   return firebase.auth()
     .createUserWithEmailAndPassword(email, password)
     .then((userData) => {
-      userData.sendEmailVerification()
       userData.updateProfile({
         displayName,
         photoURL
       })
+      .then(() => userData.sendEmailVerification())
       // Login to newly created account if signIn
       return firebase.auth().currentUser || (!!signIn && signIn === false)
         ? createUserProfile(dispatch, firebase, userData, profile)
