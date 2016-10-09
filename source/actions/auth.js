@@ -261,7 +261,7 @@ export const logout = (dispatch, firebase) => {
  * @param {Object} credentials - Login credentials
  * @return {Promise}
  */
-export const createUser = (dispatch, firebase, { email, password, signIn }, profile) => {
+export const createUser = (dispatch, firebase, { email, password, signIn, displayName, photoURL }, profile) => {
   dispatchLoginError(dispatch, null)
 
   if (!email || !password) {
@@ -273,6 +273,10 @@ export const createUser = (dispatch, firebase, { email, password, signIn }, prof
     .createUserWithEmailAndPassword(email, password)
     .then((userData) => {
       userData.sendEmailVerification()
+      userData.updateProfile({
+        displayName,
+        photoURL
+      })
       // Login to newly created account if signIn
       return firebase.auth().currentUser || (!!signIn && signIn === false)
         ? createUserProfile(dispatch, firebase, userData, profile)
