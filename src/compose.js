@@ -114,7 +114,8 @@ export default (config, otherConfig) =>
       applyActionCode,
       checkActionCode,
       watchEvent,
-      unWatchEvent
+      unWatchEvent,
+      storage: () => Firebase.storage()
     }
 
     authActions.init(dispatch, firebase)

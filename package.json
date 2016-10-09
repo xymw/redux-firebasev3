@@ -1,22 +1,22 @@
 {
   "name": "redux-firebasev3",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "A Higher Order Component to use Firebase version 3 with Redux",
-  "main": "build/index.js",
-  "module": "source/index.js",
-  "jsnext:main": "source/index.js",
+  "main": "dist/index.js",
+  "module": "src/index.js",
+  "jsnext:main": "src/index.js",
   "files": [
-    "build",
-    "source"
+    "dist",
+    "src"
   ],
   "scripts": {
-    "build": "babel source --out-dir build --presets es2015,stage-1,react --plugins transform-decorators-legacy,lodash",
-    "build-dev": "babel source --out-dir build --watch --source-maps inline",
+    "build": "babel src --out-dir dist --presets es2015,stage-1,react --plugins transform-decorators-legacy,lodash",
+    "build-dev": "babel src --out-dir dist --watch --src-maps inline",
     "watch": "npm run build -- --watch",
-    "clean": "rimraf build",
+    "clean": "rimraf dist",
     "prepublish": "npm run clean && npm run build",
     "install": "npm run clean && npm run build",
-    "lint": "eslint source/**",
+    "lint": "eslint src/**",
     "lint:fix": "npm run lint -- --fix",
     "test": "mocha -R spec --compilers js:babel-core/register ./test/setup.js ./test/**/*.spec.js",
     "test:cov": "babel-node $(npm bin)/isparta cover --report lcov ./node_modules/mocha/bin/_mocha -- ./test/** --recursive",
@@ -60,17 +60,18 @@
   "keywords": [
     "firebase",
     "redux",
+    "redux-firebase",
     "react",
     "babel",
     "hoc",
     "higher-order"
   ],
   "dependencies": {
-    "es6-promise": "^3.2.1",
-    "firebase": "^3.4.0",
+    "es6-promise": "^4.0.5",
+    "firebase": "^3.4.1",
     "immutable": "^3.8.1",
     "jwt-decode": "^2.1.0",
-    "lodash": "^4.15.0",
+    "lodash": "^4.16.3"
     "babel-plugin-lodash": "^3.2.8",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-preset-es2015": "^6.14.0",
@@ -83,26 +84,26 @@
     "redux": "^3.0.5"
   },
   "devDependencies": {
-    "babel-cli": "^6.14.0",
-    "babel-core": "^6.14.0",
-    "babel-eslint": "^6.1.2",
+    "babel-cli": "^6.16.0",
+    "babel-core": "^6.16.0",
+    "babel-eslint": "^7.0.0",
     "chai": "^3.5.0",
     "codecov": "^1.0.1",
-    "eslint": "^3.4.0",
-    "eslint-config-standard": "^6.0.0",
-    "eslint-config-standard-react": "^4.0.0",
+    "eslint": "^3.7.0",
+    "eslint-config-standard": "^6.2.0",
+    "eslint-config-standard-react": "^4.2.0",
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-promise": "^2.0.1",
-    "eslint-plugin-react": "^6.2.0",
-    "eslint-plugin-standard": "^2.0.0",
+    "eslint-plugin-react": "^6.3.0",
+    "eslint-plugin-standard": "^2.0.1",
     "isparta": "^4.0.0",
-    "mocha": "^3.0.2",
+    "mocha": "^3.1.0",
     "rimraf": "^2.5.4"
   },
   "npmName": "redux-firebasev3",
   "npmFileMap": [
     {
-      "basePath": "/build/",
+      "basePath": "/dist/",
       "files": [
         "*.js"
       ]
