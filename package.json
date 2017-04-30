@@ -14,8 +14,8 @@
     "test": "mocha -R spec --compilers js:babel-core/register ./tests/setup.js ./tests/**/*.spec.js",
     "test:cov": "istanbul cover ./node_modules/mocha/bin/_mocha -- ./tests/** --recursive --report lcov --compilers js:babel-register --require babel-polyfill",
     "codecov": "cat coverage/*/lcov.info | codecov",
-    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
-    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib --presets es2015,stage-1,react --plugins es6-promise,add-module-exports,lodash,transform-object-rest-spread,transform-class-properties,transform-decorators-legacy",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es --presets es2015,stage-1,react --plugins es6-promise,add-module-exports,lodash,transform-object-rest-spread,transform-class-properties,transform-decorators-legacy",
     "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-redux-firebase.js",
     "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-redux-firebase.min.js",
     "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
@@ -70,6 +70,7 @@
     "babel-preset-stage-1": "^6.16.0",
     "babel-register": "^6.3.13",
     "cross-env": "^1.0.7",
+    "webpack": "^1.9.6",
     "lodash": "^4.17.4"
   },
   "peerDependencies": {
@@ -99,8 +100,7 @@
     "redux": "3.6.0",
     "rimraf": "^2.5.4",
     "sinon": "^1.17.6",
-    "sinon-chai": "^2.8.0",
-    "webpack": "^1.9.6"
+    "sinon-chai": "^2.8.0"
   },
   "license": "MIT",
   "repository": {
