@@ -327,7 +327,7 @@ export const logout = (dispatch, firebase) => {
  * @return {Promise}
  * @private
  */
-export const createUser = (dispatch, firebase, { email, password, signIn }, profile) => {
+export const createUser = (dispatch, firebase, { email, password, signIn, displayName, photoURL }, profile) => {
   dispatchLoginError(dispatch, null)
 
   if (!email || !password) {
@@ -337,27 +337,31 @@ export const createUser = (dispatch, firebase, { email, password, signIn }, prof
 
   return firebase.auth()
     .createUserWithEmailAndPassword(email, password)
-    .then((userData) =>
+    .then((userData) => {
+      userData.updateProfile({
+        displayName,
+        photoURL
+      })
+      .then(() => userData.sendEmailVerification())
       // Login to newly created account if signIn flag is not set to false
-      firebase.auth().currentUser || (!!signIn && signIn === false)
-        ? createUserProfile(dispatch, firebase, userData, profile || { email })
-        : login(dispatch, firebase, { email, password })
-            .then(() =>
-              createUserProfile(dispatch, firebase, userData, profile || { email })
-            )
-            .catch(err => {
-              if (err) {
-                switch (err.code) {
-                  case 'auth/user-not-found':
-                    dispatchLoginError(dispatch, new Error('The specified user account does not exist.'))
-                    break
-                  default:
-                    dispatchLoginError(dispatch, err)
-                }
-              }
-              return Promise.reject(err)
-            })
-    )
+      return firebase.auth().currentUser || (!!signIn && signIn === false) ? createUserProfile(dispatch, firebase, userData, profile || {email}) : login(dispatch, firebase, {
+        email,
+        password
+      })
+      .then(() => createUserProfile(dispatch, firebase, userData, profile || {email}))
+      .catch(err => {
+        if (err) {
+          switch (err.code) {
+            case 'auth/user-not-found':
+              dispatchLoginError(dispatch, new Error('The specified user account does not exist.'))
+              break
+            default:
+              dispatchLoginError(dispatch, err)
+          }
+        }
+        return Promise.reject(err)
+      })
+    })
     .catch((err) => {
       dispatchLoginError(dispatch, err)
       return Promise.reject(err)
@@ -446,6 +450,52 @@ export const verifyPasswordResetCode = (dispatch, firebase, code) => {
         dispatchLoginError(dispatch, err)
       }
       return Promise.reject(err)
+    })
+}
+
+/**
+ * @description Applies a verification code sent to the user by email or other out-of-band mechanism.
+ * @param {String} code - Action code
+ * @return {Promise}
+ */
+export const applyActionCode = (dispatch, firebase, code) => {
+  dispatchLoginError(dispatch, null)
+  return firebase.auth()
+    .applyActionCode(code)
+    .catch((err) => {
+      if (err) {
+        switch (err.code) {
+          case 'INVALID_USER':
+            dispatchLoginError(dispatch, new Error('The specified user account does not exist.'))
+            break
+          default:
+            dispatchLoginError(dispatch, err)
+        }
+        return Promise.reject(err)
+      }
+    })
+}
+
+/**
+ * @description Checks a verification code sent to the user by email or other out-of-band mechanism.
+ * @param {String} code - Action code
+ * @return {Promise}
+ */
+export const checkActionCode = (dispatch, firebase, code) => {
+  dispatchLoginError(dispatch, null)
+  return firebase.auth()
+    .checkActionCode(code)
+    .catch((err) => {
+      if (err) {
+        switch (err.code) {
+          case 'INVALID_USER':
+            dispatchLoginError(dispatch, new Error('The specified user account does not exist.'))
+            break
+          default:
+            dispatchLoginError(dispatch, err)
+        }
+        return Promise.reject(err)
+      }
     })
 }
 

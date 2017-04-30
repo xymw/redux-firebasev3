@@ -9,6 +9,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "lint": "eslint src/** test/**",
+    "install": "npm run clean && npm run build",
     "lint:fix": "npm run lint -- --fix",
     "test": "mocha -R spec --compilers js:babel-core/register ./tests/setup.js ./tests/**/*.spec.js",
     "test:cov": "istanbul cover ./node_modules/mocha/bin/_mocha -- ./tests/** --recursive --report lcov --compilers js:babel-register --require babel-polyfill",
@@ -53,16 +54,10 @@
     "firebase": "3.6.5",
     "immutable": "^3.8.1",
     "jwt-decode": "^2.1.0",
-    "lodash": "^4.17.4"
-  },
-  "peerDependencies": {
-    "react": "^0.14.6 || ^15.0.0"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-core": "^6.18.2",
-    "babel-eslint": "^7.1.0",
-    "babel-loader": "^6.2.0",
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
+    "babel-eslint": "^7.2.1",
+    "babel-loader": "^6.4.1",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-es6-promise": "^1.0.0",
     "babel-plugin-lodash": "^3.2.9",
@@ -74,6 +69,12 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-1": "^6.16.0",
     "babel-register": "^6.3.13",
+    "lodash": "^4.17.4"
+  },
+  "peerDependencies": {
+    "react": "^0.14.6 || ^15.0.0"
+  },
+  "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "codecov": "^1.0.1",

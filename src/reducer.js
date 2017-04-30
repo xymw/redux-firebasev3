@@ -144,10 +144,13 @@ export default (state = initialState, action = {}) => {
                   .setIn(['authError'], null)
 
     case LOGIN_ERROR:
-      return state
-              .setIn(['authError'], action.authError)
-              .setIn(['auth'], null)
-              .setIn(['profile'], null)
+      if (action.authError) {
+        return state
+          .setIn(['authError'], action.authError)
+          .setIn(['auth'], null)
+          .setIn(['profile'], null)
+      }
+      return state.setIn(['authError'], action.authError)
 
     case AUTHENTICATION_INIT_STARTED:
       return initialState.setIn(['isInitializing'], true)

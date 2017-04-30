@@ -311,6 +311,12 @@ export default (fbConfig, otherConfig) => next =>
     const verifyPasswordResetCode = (code) =>
       authActions.verifyPasswordResetCode(dispatch, firebase, code)
 
+    const applyActionCode = (code) =>
+      authActions.applyActionCode(dispatch, firebase, code)
+
+    const checkActionCode = (code) =>
+      authActions.checkActionCode(dispatch, firebase, code)
+
     /**
      * @name ref
      * @description Firebase ref function
@@ -347,6 +353,8 @@ export default (fbConfig, otherConfig) => next =>
       resetPassword,
       confirmPasswordReset,
       verifyPasswordResetCode,
+      applyActionCode,
+      checkActionCode,
       watchEvent,
       unWatchEvent,
       storage: () => Firebase.storage()
